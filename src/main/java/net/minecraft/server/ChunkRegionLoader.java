@@ -32,7 +32,9 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
     // CraftBukkit start - Add async variant, provide compatibility
     @Nullable
     public Chunk a(World world, int i, int j) throws IOException {
+        world.timings.syncChunkLoadDataTimer.startTiming(); // Spigot
         Object[] data = loadChunk(world, i, j);
+        world.timings.syncChunkLoadDataTimer.stopTiming(); // Spigot
         if (data != null) {
             Chunk chunk = (Chunk) data[0];
             NBTTagCompound nbttagcompound = (NBTTagCompound) data[1];
@@ -386,7 +388,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
     public void loadEntities(Chunk chunk, NBTTagCompound nbttagcompound, World world) {
         // CraftBukkit end
-
+        world.timings.syncChunkLoadEntitiesTimer.startTiming(); // Spigot
         NBTTagList nbttaglist1 = nbttagcompound.getList("Entities", 10);
 
         for (int l = 0; l < nbttaglist1.size(); ++l) {
@@ -395,7 +397,8 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             a(nbttagcompound2, world, chunk);
             chunk.g(true);
         }
-
+        world.timings.syncChunkLoadEntitiesTimer.stopTiming(); // Spigot
+        world.timings.syncChunkLoadTileEntitiesTimer.startTiming(); // Spigot
         NBTTagList nbttaglist2 = nbttagcompound.getList("TileEntities", 10);
 
         for (int i1 = 0; i1 < nbttaglist2.size(); ++i1) {
@@ -406,6 +409,8 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
                 chunk.a(tileentity);
             }
         }
+        world.timings.syncChunkLoadTileEntitiesTimer.stopTiming(); // Spigot
+        world.timings.syncChunkLoadTileTicksTimer.startTiming(); // Spigot
 
         if (nbttagcompound.hasKeyOfType("TileTicks", 9)) {
             NBTTagList nbttaglist3 = nbttagcompound.getList("TileTicks", 10);
@@ -423,6 +428,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
                 world.b(new BlockPosition(nbttagcompound4.getInt("x"), nbttagcompound4.getInt("y"), nbttagcompound4.getInt("z")), block, nbttagcompound4.getInt("t"), nbttagcompound4.getInt("p"));
             }
         }
+        world.timings.syncChunkLoadTileTicksTimer.stopTiming(); // Spigot
 
         // return chunk; // CraftBukkit
     }

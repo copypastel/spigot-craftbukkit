@@ -842,6 +842,7 @@ public class Chunk {
 
     // CraftBukkit start
     public void loadNearby(IChunkProvider ichunkprovider, ChunkGenerator chunkgenerator, boolean newChunk) {
+        world.timings.syncChunkLoadPostTimer.startTiming(); // Spigot
         Server server = world.getServer();
         if (server != null) {
             /*
@@ -892,6 +893,7 @@ public class Chunk {
                 chunk4.a(chunkgenerator);
             }
         }
+        world.timings.syncChunkLoadPostTimer.stopTiming(); // Spigot
 
     }
 

@@ -153,6 +153,7 @@ public class ChunkProviderServer implements IChunkProvider {
         // CraftBukkit end
 
         if (chunk == null) {
+            world.timings.syncChunkLoadTimer.startTiming(); // Spigot
             long k = ChunkCoordIntPair.a(i, j);
 
             try {
@@ -170,6 +171,7 @@ public class ChunkProviderServer implements IChunkProvider {
             this.chunks.put(k, chunk);
             chunk.addEntities();
             chunk.loadNearby(this, this.chunkGenerator, true); // CraftBukkit
+            world.timings.syncChunkLoadTimer.stopTiming(); // Spigot
         }
 
         return chunk;

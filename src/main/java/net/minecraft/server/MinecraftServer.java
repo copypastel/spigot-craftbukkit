@@ -47,6 +47,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.Main;
 // CraftBukkit end
+import org.bukkit.craftbukkit.SpigotTimings; // Spigot
 
 public abstract class MinecraftServer implements Runnable, ICommandListener, IAsyncTaskHandler, IMojangStatistics {
 
@@ -637,6 +638,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     public void B() {}
 
     protected void C() throws ExceptionWorldConflict { // CraftBukkit - added throws
+        SpigotTimings.serverTickTimer.startTiming(); // Spigot
         long i = System.nanoTime();
 
         ++this.ticks;
@@ -663,10 +665,12 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         }
 
         if (autosavePeriod > 0 && this.ticks % autosavePeriod == 0) { // CraftBukkit
+            SpigotTimings.worldSaveTimer.startTiming(); // Spigot
             this.methodProfiler.a("save");
             this.v.savePlayers();
             this.saveChunks(true);
             this.methodProfiler.b();
+            SpigotTimings.worldSaveTimer.stopTiming(); // Spigot
         }
 
         this.methodProfiler.a("tallying");
@@ -683,10 +687,14 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
         this.methodProfiler.b();
         this.methodProfiler.b();
+        SpigotTimings.serverTickTimer.stopTiming(); // Spigot
+        org.spigotmc.CustomTimingsHandler.tick(); // Spigot
     }
 
     public void D() {
+        SpigotTimings.schedulerTimer.startTiming(); // Spigot
         this.server.getScheduler().mainThreadHeartbeat(this.ticks); // CraftBukkit
+        SpigotTimings.schedulerTimer.stopTiming(); // Spigot
         this.methodProfiler.a("jobs");
         Queue queue = this.j;
 
@@ -700,12 +708,17 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
         // CraftBukkit start
         // Run tasks that are waiting on processing
+        SpigotTimings.processQueueTimer.startTiming(); // Spigot
         while (!processQueue.isEmpty()) {
             processQueue.remove().run();
         }
+        SpigotTimings.processQueueTimer.stopTiming(); // Spigot
 
+        SpigotTimings.chunkIOTickTimer.startTiming(); // Spigot
         org.bukkit.craftbukkit.chunkio.ChunkIOExecutor.tick();
+        SpigotTimings.chunkIOTickTimer.stopTiming(); // Spigot
 
+        SpigotTimings.timeUpdateTimer.startTiming(); // Spigot
         // Send time updates to everyone, it will get the right time from the world the player is in.
         if (this.ticks % 20 == 0) {
             for (int i = 0; i < this.getPlayerList().players.size(); ++i) {
@@ -713,6 +726,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                 entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(entityplayer.world.getTime(), entityplayer.getPlayerTime(), entityplayer.world.getGameRules().getBoolean("doDaylightCycle"))); // Add support for per player time
             }
         }
+        SpigotTimings.timeUpdateTimer.stopTiming(); // Spigot
 
         int i;
 
@@ -736,7 +750,9 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                 CrashReport crashreport;
 
                 try {
+                    worldserver.timings.doTick.startTiming(); // Spigot
                     worldserver.doTick();
+                    worldserver.timings.doTick.stopTiming(); // Spigot
                 } catch (Throwable throwable) {
                     crashreport = CrashReport.a(throwable, "Exception ticking world");
                     worldserver.a(crashreport);
@@ -744,7 +760,9 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                 }
 
                 try {
+                    worldserver.timings.tickEntities.startTiming(); // Spigot
                     worldserver.tickEntities();
+                    worldserver.timings.tickEntities.stopTiming(); // Spigot
                 } catch (Throwable throwable1) {
                     crashreport = CrashReport.a(throwable1, "Exception ticking world entities");
                     worldserver.a(crashreport);
@@ -753,7 +771,9 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
                 this.methodProfiler.b();
                 this.methodProfiler.a("tracker");
+                worldserver.timings.tracker.startTiming(); // Spigot
                 worldserver.getTracker().updatePlayers();
+                worldserver.timings.tracker.stopTiming(); // Spigot
                 this.methodProfiler.b();
                 this.methodProfiler.b();
             // } // CraftBukkit
@@ -762,14 +782,20 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         }
 
         this.methodProfiler.c("connection");
+        SpigotTimings.connectionTimer.startTiming(); // Spigot
         this.an().c();
+        SpigotTimings.connectionTimer.stopTiming(); // Spigot
         this.methodProfiler.c("players");
+        SpigotTimings.playerListTimer.startTiming(); // Spigot
         this.v.tick();
+        SpigotTimings.playerListTimer.stopTiming(); // Spigot
         this.methodProfiler.c("tickables");
 
+        SpigotTimings.tickablesTimer.startTiming(); // Spigot
         for (i = 0; i < this.o.size(); ++i) {
             ((ITickable) this.o.get(i)).F_();
         }
+        SpigotTimings.tickablesTimer.stopTiming(); // Spigot
 
         this.methodProfiler.b();
     }

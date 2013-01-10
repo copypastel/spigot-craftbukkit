@@ -225,10 +225,13 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         // CraftBukkit start - Only call spawner if we have players online and the world allows for mobs or animals
         long time = this.worldData.getTime();
         if (this.getGameRules().getBoolean("doMobSpawning") && this.worldData.getType() != WorldType.DEBUG_ALL_BLOCK_STATES && (this.allowMonsters || this.allowAnimals) && (this instanceof WorldServer && this.players.size() > 0)) {
+            timings.mobSpawn.startTiming(); // Spigot
             this.spawnerCreature.a(this, this.allowMonsters && (this.ticksPerMonsterSpawns != 0 && time % this.ticksPerMonsterSpawns == 0L), this.allowAnimals && (this.ticksPerAnimalSpawns != 0 && time % this.ticksPerAnimalSpawns == 0L), this.worldData.getTime() % 400L == 0L);
+            timings.mobSpawn.stopTiming(); // Spigot
             // CraftBukkit end
         }
 
+        timings.doChunkUnload.startTiming(); // Spigot
         this.methodProfiler.c("chunkSource");
         this.chunkProvider.unloadChunks();
         int j = this.a(1.0F);
@@ -242,21 +245,36 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.worldData.setDayTime(this.worldData.getDayTime() + 1L);
         }
 
+        timings.doChunkUnload.stopTiming(); // Spigot
         this.methodProfiler.c("tickPending");
+        timings.doTickPending.startTiming(); // Spigot
         this.a(false);
+        timings.doTickPending.stopTiming(); // Spigot
         this.methodProfiler.c("tickBlocks");
+        timings.doTickTiles.startTiming(); // Spigot
         this.j();
+        timings.doTickTiles.stopTiming(); // Spigot
         this.methodProfiler.c("chunkMap");
+        timings.doChunkMap.startTiming(); // Spigot
         this.manager.flush();
+        timings.doChunkMap.stopTiming(); // Spigot
         this.methodProfiler.c("village");
+        timings.doVillages.startTiming(); // Spigot
         this.villages.tick();
         this.siegeManager.a();
+        timings.doVillages.stopTiming(); // Spigot
         this.methodProfiler.c("portalForcer");
+        timings.doPortalForcer.startTiming(); // Spigot
         this.portalTravelAgent.a(this.getTime());
+        timings.doPortalForcer.stopTiming(); // Spigot
         this.methodProfiler.b();
+        timings.doSounds.startTiming(); // Spigot
         this.ao();
+        timings.doSounds.stopTiming(); // Spigot
 
+        timings.doChunkGC.startTiming();// Spigot
         this.getWorld().processChunkGC(); // CraftBukkit
+        timings.doChunkGC.stopTiming(); // Spigot
     }
 
     @Nullable
