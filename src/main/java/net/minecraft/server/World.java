@@ -1408,6 +1408,13 @@ public abstract class World implements IBlockAccess {
 
         while (iterator.hasNext()) {
             TileEntity tileentity = (TileEntity) iterator.next();
+            // Spigot start
+            if (tileentity == null) {
+                getServer().getLogger().severe("Spigot has detected a null entity and has removed it, preventing a crash");
+                iterator.remove();
+                continue;
+            }
+            // Spigot end
 
             if (!tileentity.y() && tileentity.u()) {
                 BlockPosition blockposition = tileentity.getPosition();
