@@ -1347,6 +1347,7 @@ public abstract class World implements IBlockAccess {
         CrashReportSystemDetails crashreportsystemdetails1;
         CrashReport crashreport1;
 
+        org.spigotmc.ActivationRange.activateEntities(this); // Spigot
         timings.entityTick.startTiming(); // Spigot
         // CraftBukkit start - Use field for loop variable
         for (this.tickPosition = 0; this.tickPosition < this.entityList.size(); ++this.tickPosition) {
@@ -1538,9 +1539,11 @@ public abstract class World implements IBlockAccess {
         int j = MathHelper.floor(entity.locZ);
         boolean flag1 = true;
 
-        // CraftBukkit start - Use neighbor cache instead of looking up
-        Chunk startingChunk = this.getChunkIfLoaded(i >> 4, j >> 4);
-        if (!flag || (startingChunk != null && startingChunk.areNeighborsLoaded(2)) /* this.isAreaLoaded(i - b0, 0, j - b0, i + b0, 0, j + b0) */) {
+        // Spigot start
+        if (flag && !org.spigotmc.ActivationRange.checkIfActive(entity)) {
+            entity.ticksLived++;
+            entity.inactiveTick();
+        } else {
             entity.tickTimer.startTiming(); // Spigot
             // CraftBukkit end
             entity.M = entity.locX;

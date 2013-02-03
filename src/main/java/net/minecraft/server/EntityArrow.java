@@ -39,6 +39,18 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     private double damage;
     public int knockbackStrength;
 
+    // Spigot Start
+    @Override
+    public void inactiveTick()
+    {
+        if ( this.inGround )
+        {
+            this.ax += 1; // Despawn counter. First int after shooter
+        }
+        super.inactiveTick();
+    }
+    // Spigot End
+
     public EntityArrow(World world) {
         super(world);
         this.h = -1;

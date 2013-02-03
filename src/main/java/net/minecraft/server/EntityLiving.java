@@ -115,6 +115,13 @@ public abstract class EntityLiving extends Entity {
     public org.bukkit.craftbukkit.attribute.CraftAttributeMap craftAttributes;
     public boolean collides = true;
     // CraftBukkit end
+    // Spigot start
+    public void inactiveTick()
+    {
+        super.inactiveTick();
+        ++this.ticksFarFromPlayer; // Above all the floats
+    }
+    // Spigot end
 
     public void Q() {
         this.damageEntity(DamageSource.OUT_OF_WORLD, Float.MAX_VALUE);

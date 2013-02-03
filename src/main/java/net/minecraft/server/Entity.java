@@ -109,7 +109,7 @@ public abstract class Entity implements ICommandListener {
     protected Random random;
     public int ticksLived;
     public int fireTicks;
-    public boolean inWater;
+    public boolean inWater; // Spigot - protected -> public // PAIL
     public int noDamageTicks;
     protected boolean justCreated;
     protected boolean fireProof;
@@ -146,6 +146,12 @@ public abstract class Entity implements ICommandListener {
     public org.bukkit.projectiles.ProjectileSource projectileSource; // CraftBukkit - For projectiles only
     public boolean forceExplosionKnockback; // CraftBukkit - SPIGOT-949
     public CustomTimingsHandler tickTimer = org.bukkit.craftbukkit.SpigotTimings.getEntityTimings(this); // Spigot
+    // Spigot start
+    public final byte activationType = org.spigotmc.ActivationRange.initializeEntityActivationType(this);
+    public final boolean defaultActivationState;
+    public long activatedTick = Integer.MIN_VALUE;
+    public void inactiveTick() { }
+    // Spigot end
 
     public Entity(World world) {
         this.id = Entity.entityCount++;
@@ -166,7 +172,12 @@ public abstract class Entity implements ICommandListener {
         this.setPosition(0.0D, 0.0D, 0.0D);
         if (world != null) {
             this.dimension = world.worldProvider.getDimensionManager().getDimensionID();
+            // Spigot start
+            this.defaultActivationState = org.spigotmc.ActivationRange.initializeEntityActivationState(this, world.spigotConfig);
+        } else {
+            this.defaultActivationState = false;
         }
+        // Spigot end
 
         this.datawatcher = new DataWatcher(this);
         this.datawatcher.register(Entity.Z, Byte.valueOf((byte) 0));
