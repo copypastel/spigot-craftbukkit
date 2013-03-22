@@ -18,7 +18,7 @@ public class EntityTracker {
 
     public EntityTracker(WorldServer worldserver) {
         this.world = worldserver;
-        this.e = worldserver.getMinecraftServer().getPlayerList().d();
+        this.e = PlayerChunkMap.getFurthestViewableBlock(worldserver.spigotConfig.viewDistance); // Spigot
     }
 
     public static long a(double d0) {
