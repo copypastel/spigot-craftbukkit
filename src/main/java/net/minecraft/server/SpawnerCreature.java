@@ -19,6 +19,25 @@ public final class SpawnerCreature {
 
     public SpawnerCreature() {}
 
+    // Spigot start - get entity count only from chunks being processed in b
+    private int getEntityCount(WorldServer server, Class oClass)
+    {
+        int i = 0;
+        Iterator<Long> it = this.b.iterator();
+        while ( it.hasNext() )
+        {
+            Long coord = it.next();
+            int x = LongHash.msw( coord );
+            int z = LongHash.lsw( coord );
+            if ( !((ChunkProviderServer)server.chunkProvider).unloadQueue.contains( coord ) && server.isChunkLoaded( x, z, true ) )
+            {
+                i += server.getChunkAt( x, z ).entityCount.get( oClass );
+            }
+        }
+        return i;
+    }
+    // Spigot end
+
     public int a(WorldServer worldserver, boolean flag, boolean flag1, boolean flag2) {
         if (!flag && !flag1) {
             return 0;
@@ -38,10 +57,15 @@ public final class SpawnerCreature {
 
                     j = MathHelper.floor(entityhuman.locZ / 16.0D);
                     boolean flag3 = true;
+                    // Spigot Start
+                    byte b0 = worldserver.spigotConfig.mobSpawnRange;
+                    b0 = ( b0 > worldserver.spigotConfig.viewDistance ) ? (byte) worldserver.spigotConfig.viewDistance : b0;
+                    b0 = ( b0 > 8 ) ? 8 : b0;
 
-                    for (int i1 = -8; i1 <= 8; ++i1) {
-                        for (k = -8; k <= 8; ++k) {
-                            boolean flag4 = i1 == -8 || i1 == 8 || k == -8 || k == 8;
+                    for (int i1 = -b0; i1 <= b0; ++i1) {
+                        for (k = -b0; k <= b0; ++k) {
+                            boolean flag4 = i1 == -b0 || i1 == b0 || k == -b0 || k == b0;
+                            // Spigot End
                             ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i1 + l, k + j);
 
                             // CraftBukkit start - use LongHash and LongHashSet
@@ -91,18 +115,20 @@ public final class SpawnerCreature {
                 if (limit == 0) {
                     continue;
                 }
+				int mobcnt = 0; // Spigot
                 // CraftBukkit end
 
                 if ((!enumcreaturetype.d() || flag1) && (enumcreaturetype.d() || flag) && (!enumcreaturetype.e() || flag2)) {
                     k = worldserver.a(enumcreaturetype.a());
                     int l1 = limit * i / a; // CraftBukkit - use per-world limits
 
-                    if (k <= l1) {
+                    if ((mobcnt = getEntityCount(worldserver, enumcreaturetype.a())) <= limit * i / 256) {
                         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
                         Iterator iterator1 = this.b.iterator();
 
+                        int moblimit = (limit * i / 256) - mobcnt + 1; // Spigot - up to 1 more than limit
                         label120:
-                        while (iterator1.hasNext()) {
+                        while (iterator1.hasNext() && (moblimit > 0)) { // Spigot - while more allowed
                             // CraftBukkit start = use LongHash and LongObjectHashMap
                             long key = ((Long) iterator1.next()).longValue();
                             BlockPosition blockposition1 = getRandomPosition(worldserver, LongHash.msw(key), LongHash.lsw(key));
@@ -161,13 +187,17 @@ public final class SpawnerCreature {
                                                                 // CraftBukkit start
                                                                 if (worldserver.addEntity(entityinsentient, SpawnReason.NATURAL)) {
                                                                     ++l2;
+                                                                    moblimit--; // Spigot
                                                                 }
                                                                 // CraftBukkit end
                                                             } else {
                                                                 entityinsentient.die();
                                                             }
 
-                                                            if (l2 >= entityinsentient.cQ()) {
+                                                            // Spigot start
+                                                            if ( moblimit <= 0 ) {
+                                                                // If we're past limit, stop spawn
+                                                                // Spigot end
                                                                 continue label120;
                                                             }
                                                         }
