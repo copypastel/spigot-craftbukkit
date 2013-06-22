@@ -1001,7 +1001,7 @@ public class Chunk {
         }
 
         this.r = true;
-        if (!this.lit && this.done) {
+        if (!this.lit && this.done && this.world.spigotConfig.randomLightUpdates) { // Spigot - also use random light updates setting to determine if we should relight
             this.o();
         }
 
