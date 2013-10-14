@@ -201,4 +201,11 @@ public class SpigotWorldConfig
             log( "*** WARNING *** Please use this option with caution, SpigotMC is not responsible for any issues this option may cause in the future!" );
         }
     }
+
+    public int arrowDespawnRate;
+    private void arrowDespawnRate()
+    {
+        arrowDespawnRate = getInt( "arrow-despawn-rate", 1200  );
+        log( "Arrow Despawn Rate: " + arrowDespawnRate );
+    }
 }

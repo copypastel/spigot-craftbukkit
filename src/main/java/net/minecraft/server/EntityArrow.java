@@ -157,7 +157,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                 this.ay = 0;
             } else {
                 ++this.ax;
-                if (this.ax >= 1200) {
+                if (this.ax >= world.spigotConfig.arrowDespawnRate) { // Spigot - First int after shooter
                     this.die();
                 }
             }
