@@ -1461,6 +1461,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     {
 
         @Override
+        public InetSocketAddress getRawAddress()
+        {
+            return (InetSocketAddress) getHandle().playerConnection.networkManager.getRawAddress();
+        }
+
+        @Override
         public boolean getCollidesWithEntities() {
             return CraftPlayer.this.isCollidable();
         }

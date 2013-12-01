@@ -87,9 +87,24 @@ public class LoginListener implements PacketLoginInListener, ITickable {
     // Spigot start
     public void initUUID()
     {
-        UUID uuid = UUID.nameUUIDFromBytes( ( "OfflinePlayer:" + this.i.getName() ).getBytes( Charsets.UTF_8 ) );
+        UUID uuid;
+        if ( networkManager.spoofedUUID != null )
+        {
+            uuid = networkManager.spoofedUUID;
+        } else
+        {
+            uuid = UUID.nameUUIDFromBytes( ( "OfflinePlayer:" + this.i.getName() ).getBytes( Charsets.UTF_8 ) );
+        }
 
         this.i = new GameProfile( uuid, this.i.getName() );
+
+        if (networkManager.spoofedProfile != null)
+        {
+            for ( com.mojang.authlib.properties.Property property : networkManager.spoofedProfile )
+            {
+                this.i.getProperties().put( property.getName(), property );
+            }
+        }
     }
     // Spigot end
 
