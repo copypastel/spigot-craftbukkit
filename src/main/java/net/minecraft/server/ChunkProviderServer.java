@@ -232,7 +232,7 @@ public class ChunkProviderServer implements IChunkProvider {
                 this.saveChunk(chunk);
                 chunk.f(false);
                 ++i;
-                if (i == 24 && !flag) {
+                if (i == 24 && !flag && false) { // Spigot
                     return false;
                 }
             }
