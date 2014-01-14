@@ -1,4 +1,4 @@
-package net.minecraft.server;
+	package net.minecraft.server;
 
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
@@ -1118,6 +1118,7 @@ public abstract class World implements IBlockAccess {
             this.everyoneSleeping();
         }
 
+        if (!guardEntityList) { // Spigot - It will get removed after the tick if we are ticking
         int i = entity.ab;
         int j = entity.ad;
 
@@ -1134,6 +1135,7 @@ public abstract class World implements IBlockAccess {
             this.entityList.remove(index);
         }
         // CraftBukkit end
+        } // Spigot
         this.c(entity);
     }
 
