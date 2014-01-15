@@ -1110,7 +1110,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             this.player.resetIdleTimer();
         } else {
             PlayerConnection.LOGGER.warn("{} tried to set an invalid carried item", new Object[] { this.player.getName()});
-            this.disconnect("Nope!"); // CraftBukkit
+            this.disconnect("Invalid hotbar selection (Hacking?)"); // CraftBukkit //Spigot "Nope" -> Descriptive reason
         }
     }
 
