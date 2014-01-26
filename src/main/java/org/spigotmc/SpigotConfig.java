@@ -263,4 +263,9 @@ public class SpigotConfig
                     "screen." );
         }
     }
+
+    private static void tpsCommand()
+    {
+        commands.put( "tps", new TicksPerSecondCommand( "tps" ) );
+    }
 }
