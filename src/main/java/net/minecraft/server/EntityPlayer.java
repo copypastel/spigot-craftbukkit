@@ -31,7 +31,7 @@ import org.bukkit.inventory.MainHand;
 public class EntityPlayer extends EntityHuman implements ICrafting {
 
     private static final Logger bR = LogManager.getLogger();
-    private String locale = "en_US";
+    public String locale = "en_US"; // Spigot private -> public
     public PlayerConnection playerConnection;
     public final MinecraftServer server;
     public final PlayerInteractManager playerInteractManager;
