@@ -1945,7 +1945,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
             boolean flag1 = packetplayinsetcreativeslot.a() >= 1 && packetplayinsetcreativeslot.a() <= 45;
             // CraftBukkit - Add invalidItems check
-            boolean flag2 = itemstack.isEmpty() || itemstack.getData() >= 0 && itemstack.getCount() <= 64 && !itemstack.isEmpty() && !invalidItems.contains(Item.getId(itemstack.getItem()));
+            boolean flag2 = itemstack.isEmpty() || itemstack.getData() >= 0 && itemstack.getCount() <= 64 && !itemstack.isEmpty() && (!invalidItems.contains(Item.getId(itemstack.getItem())) || !org.spigotmc.SpigotConfig.filterCreativeItems); // Spigot
             if (flag || (flag1 && !ItemStack.matches(this.player.defaultContainer.getSlot(packetplayinsetcreativeslot.a()).getItem(), packetplayinsetcreativeslot.getItemStack()))) { // Insist on valid slot
                 // CraftBukkit start - Call click event
                 org.bukkit.entity.HumanEntity player = this.player.getBukkitEntity();
