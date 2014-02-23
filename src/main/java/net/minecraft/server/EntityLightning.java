@@ -11,6 +11,7 @@ public class EntityLightning extends EntityWeather {
     private int c;
     private final boolean d;
     public boolean isEffect; // CraftBukkit
+    public boolean isSilent = false; // Spigot
 
     public EntityLightning(World world, double d0, double d1, double d2, boolean flag) {
         super(world);
@@ -46,13 +47,21 @@ public class EntityLightning extends EntityWeather {
 
     }
 
+    // Spigot start
+    public EntityLightning(World world, double d0, double d1, double d2, boolean isEffect, boolean isSilent)
+    {
+        this( world, d0, d1, d2, isEffect );
+        this.isSilent = isSilent;
+    }
+    // Spigot end
+
     public SoundCategory bC() {
         return SoundCategory.WEATHER;
     }
 
     public void A_() {
         super.A_();
-        if (this.lifeTicks == 2) {
+        if (!isSilent && this.lifeTicks == 2) { // Spigot
             // CraftBukkit start - Use relative location for far away sounds
             // this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dv, SoundCategory.WEATHER, 10000.0F, 0.8F + this.random.nextFloat() * 0.2F);
             float pitch = 0.8F + this.random.nextFloat() * 0.2F;
