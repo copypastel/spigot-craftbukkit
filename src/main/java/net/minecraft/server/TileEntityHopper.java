@@ -517,6 +517,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         int j = MathHelper.floor(d1);
         int k = MathHelper.floor(d2);
         BlockPosition blockposition = new BlockPosition(i, j, k);
+        if ( !world.isLoaded( blockposition ) ) return null; // Spigot
         Block block = world.getType(blockposition).getBlock();
 
         if (block.isTileEntity()) {
