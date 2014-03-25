@@ -969,6 +969,7 @@ public abstract class World implements IBlockAccess {
     }
 
     public boolean addEntity(Entity entity, SpawnReason spawnReason) { // Changed signature, added SpawnReason
+        org.spigotmc.AsyncCatcher.catchOp( "entity add"); // Spigot
         if (entity == null) return false;
         // CraftBukkit end
         int i = MathHelper.floor(entity.locX / 16.0D);
@@ -1079,6 +1080,7 @@ public abstract class World implements IBlockAccess {
     }
 
     public void removeEntity(Entity entity) {
+        org.spigotmc.AsyncCatcher.catchOp( "entity remove"); // Spigot
         entity.b(false);
         entity.die();
         if (entity instanceof EntityHuman) {
@@ -2445,6 +2447,7 @@ public abstract class World implements IBlockAccess {
     }
 
     public void a(Collection<Entity> collection) {
+        org.spigotmc.AsyncCatcher.catchOp( "entity world add"); // Spigot
         // CraftBukkit start
         // this.entityList.addAll(collection);
         Iterator iterator = collection.iterator();
