@@ -40,6 +40,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.util.Vector;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 // CraftBukkit end
 
 public abstract class PlayerList {
@@ -108,6 +109,19 @@ public abstract class PlayerList {
         if (networkmanager.getSocketAddress() != null) {
             s1 = networkmanager.getSocketAddress().toString();
         }
+
+        // Spigot start - spawn location event
+        Player bukkitPlayer = entityplayer.getBukkitEntity();
+        PlayerSpawnLocationEvent ev = new PlayerSpawnLocationEvent(bukkitPlayer, bukkitPlayer.getLocation());
+        Bukkit.getPluginManager().callEvent(ev);
+
+        Location loc = ev.getSpawnLocation();
+        WorldServer world = ((CraftWorld) loc.getWorld()).getHandle();
+
+        entityplayer.spawnIn(world);
+        entityplayer.setPosition(loc.getX(), loc.getY(), loc.getZ());
+        entityplayer.setYawPitch(loc.getYaw(), loc.getPitch()); 
+        // Spigot end
 
         // CraftBukkit - Moved message to after join
         // PlayerList.f.info("{}[{}] logged in with entity id {} at ({}, {}, {})", new Object[] { entityplayer.getName(), s1, Integer.valueOf(entityplayer.getId()), Double.valueOf(entityplayer.locX), Double.valueOf(entityplayer.locY), Double.valueOf(entityplayer.locZ)});
