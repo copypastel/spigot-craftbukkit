@@ -561,6 +561,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     protected boolean aP() {
+        server.getLogger().info( "**** Beginning UUID conversion, this may take A LONG time ****"); // Spigot, let the user know whats up!
         boolean flag = false;
 
         int i;
