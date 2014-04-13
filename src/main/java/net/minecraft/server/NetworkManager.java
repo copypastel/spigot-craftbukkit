@@ -113,6 +113,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
         NetworkManager.g.debug(throwable);
         this.close(chatmessage);
+        if (MinecraftServer.getServer().isDebugging()) throwable.printStackTrace(); // Spigot
     }
 
     protected void a(ChannelHandlerContext channelhandlercontext, Packet<?> packet) throws Exception {
