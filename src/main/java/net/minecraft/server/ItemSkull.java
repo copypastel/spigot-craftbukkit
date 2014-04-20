@@ -111,13 +111,21 @@ public class ItemSkull extends Item {
         return super.b(itemstack);
     }
 
-    public boolean a(NBTTagCompound nbttagcompound) {
+    public boolean a(final NBTTagCompound nbttagcompound) { // Spigot - make final
         super.a(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("SkullOwner", 8) && !StringUtils.isBlank(nbttagcompound.getString("SkullOwner"))) {
             GameProfile gameprofile = new GameProfile((UUID) null, nbttagcompound.getString("SkullOwner"));
 
-            gameprofile = TileEntitySkull.b(gameprofile);
-            nbttagcompound.set("SkullOwner", GameProfileSerializer.serialize(new NBTTagCompound(), gameprofile));
+            // Spigot start
+            TileEntitySkull.b(gameprofile, new com.google.common.base.Predicate<GameProfile>() {
+
+                @Override
+                public boolean apply(GameProfile gameprofile) {
+                    nbttagcompound.set("SkullOwner", GameProfileSerializer.serialize(new NBTTagCompound(), gameprofile));                    
+                    return false;
+                }
+            });
+            // Spigot end
             return true;
         } else {
             // CraftBukkit start
