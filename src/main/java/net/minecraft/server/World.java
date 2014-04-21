@@ -127,6 +127,8 @@ public abstract class World implements IBlockAccess {
 
     public final SpigotTimings.WorldTimingsHandler timings; // Spigot
     private boolean guardEntityList; // Spigot
+    public static boolean haveWeSilencedAPhysicsCrash;
+    public static String blockLocation;
 
     public CraftWorld getWorld() {
         return this.world;
@@ -562,6 +564,10 @@ public abstract class World implements IBlockAccess {
                 }
                 // CraftBukkit end
                 iblockdata.doPhysics(this, blockposition, block, blockposition1);
+            } catch (StackOverflowError stackoverflowerror) { // Spigot Start
+                haveWeSilencedAPhysicsCrash = true;
+                blockLocation = blockposition.getX() + ", " + blockposition.getY() + ", " + blockposition.getZ();
+                // Spigot End
             } catch (Throwable throwable) {
                 CrashReport crashreport = CrashReport.a(throwable, "Exception while updating neighbours");
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Block being updated");
