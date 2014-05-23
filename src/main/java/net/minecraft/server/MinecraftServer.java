@@ -505,6 +505,12 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
             this.m.e();
         }
 
+        // Spigot start
+        if (org.spigotmc.SpigotConfig.saveUserCacheOnStopOnly) {
+            LOGGER.info("Saving usercache.json");
+            this.Y.c();
+        }
+        // Spigot end
     }
 
     public String getServerIp() {
