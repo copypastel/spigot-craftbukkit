@@ -53,7 +53,7 @@ public class WorldGenVillage extends StructureGenerator {
 
         int i1 = i / this.d;
         int j1 = j / this.d;
-        Random random = this.g.a(i1, j1, 10387312);
+        Random random = this.g.a(i1, j1, this.g.spigotConfig.villageSeed); // Spigot
 
         i1 *= this.d;
         j1 *= this.d;

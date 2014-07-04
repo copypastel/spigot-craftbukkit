@@ -54,7 +54,7 @@ public class WorldGenLargeFeature extends StructureGenerator {
 
         int i1 = i / this.d;
         int j1 = j / this.d;
-        Random random = this.g.a(i1, j1, 14357617);
+        Random random = this.g.a(i1, j1, this.g.spigotConfig.largeFeatureSeed); // Spigot
 
         i1 *= this.d;
         j1 *= this.d;
@@ -83,7 +83,7 @@ public class WorldGenLargeFeature extends StructureGenerator {
 
     public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag) {
         this.g = world;
-        return a(world, this, blockposition, this.d, 8, 14357617, false, 100, flag);
+        return a(world, this, blockposition, this.d, 8, this.g.spigotConfig.largeFeatureSeed, false, 100, flag); // Spigot
     }
 
     protected StructureStart b(int i, int j) {

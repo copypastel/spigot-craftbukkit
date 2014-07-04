@@ -252,7 +252,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
                     return super.cM();
                 }
 
-                if (this.random.nextInt(10) == 0 && chunk.a(987234911L).nextInt(10) == 0 && this.locY < 40.0D) {
+                if (this.random.nextInt(10) == 0 && chunk.a(world.spigotConfig.slimeSeed).nextInt(10) == 0 && this.locY < 40.0D) { // Spigot
                     return super.cM();
                 }
             }

@@ -57,7 +57,7 @@ public class WorldGenMonument extends StructureGenerator {
 
         int i1 = i / this.d;
         int j1 = j / this.d;
-        Random random = this.g.a(i1, j1, 10387313);
+        Random random = this.g.a(i1, j1, this.g.spigotConfig.monumentSeed); // Spigot
 
         i1 *= this.d;
         j1 *= this.d;
@@ -80,7 +80,7 @@ public class WorldGenMonument extends StructureGenerator {
 
     public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag) {
         this.g = world;
-        return a(world, this, blockposition, this.d, this.h, 10387313, true, 100, flag);
+        return a(world, this, blockposition, this.d, this.h, this.g.spigotConfig.monumentSeed, true, 100, flag); // Spigot
     }
 
     protected StructureStart b(int i, int j) {
