@@ -340,7 +340,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                 d10 = d6 * d6 + d7 * d7 + d8 * d8;
                 boolean flag1 = false;
 
-                if (d10 > 0.0625D) {
+                if (d10 > org.spigotmc.SpigotConfig.movedWronglyThreshold) { // Spigot
                     flag1 = true;
                     PlayerConnection.LOGGER.warn("{} moved wrongly!", new Object[] { entity.getName()});
                 }
@@ -561,7 +561,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             d11 = d7 * d7 + d8 * d8 + d9 * d9;
                             boolean flag1 = false;
 
-                            if (!this.player.K() && d11 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative() && this.player.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR) {
+                            if (!this.player.K() && d11 > org.spigotmc.SpigotConfig.movedWronglyThreshold && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative() && this.player.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR) { // Spigot
                                 flag1 = true;
                                 PlayerConnection.LOGGER.warn("{} moved wrongly!", new Object[] { this.player.getName()});
                             }
