@@ -125,6 +125,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     // Spigot end
 
     public MinecraftServer(OptionSet options, Proxy proxy, DataConverterManager dataconvertermanager, YggdrasilAuthenticationService yggdrasilauthenticationservice, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache) {
+        io.netty.util.ResourceLeakDetector.setEnabled( false ); // Spigot - disable
         this.e = proxy;
         this.V = yggdrasilauthenticationservice;
         this.W = minecraftsessionservice;
