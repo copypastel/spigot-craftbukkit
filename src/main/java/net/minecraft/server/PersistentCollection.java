@@ -19,7 +19,7 @@ public class PersistentCollection {
 
     private final IDataManager b;
     protected Map<String, PersistentBase> a = Maps.newHashMap();
-    private final List<PersistentBase> c = Lists.newArrayList();
+    public final List<PersistentBase> c = Lists.newArrayList(); // Spigot
     private final Map<String, Short> d = Maps.newHashMap();
 
     public PersistentCollection(IDataManager idatamanager) {

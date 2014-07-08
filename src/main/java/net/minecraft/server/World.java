@@ -1109,6 +1109,23 @@ public abstract class World implements IBlockAccess {
         entity.die();
         if (entity instanceof EntityHuman) {
             this.players.remove(entity);
+            // Spigot start
+            for ( Object o : worldMaps.c )
+            {
+                if ( o instanceof WorldMap )
+                {
+                    WorldMap map = (WorldMap) o;
+                    map.k.remove( entity );
+                    for ( Iterator<WorldMap.WorldMapHumanTracker> iter = (Iterator<WorldMap.WorldMapHumanTracker>) map.i.iterator(); iter.hasNext(); )
+                    {
+                        if ( iter.next().trackee == entity )
+                        {
+                            iter.remove();
+                        }
+                    }
+                }
+            }
+            // Spigot end
             this.everyoneSleeping();
             this.c(entity);
         }

@@ -25,7 +25,7 @@ public class WorldMap extends PersistentBase {
     public byte scale;
     public byte[] colors = new byte[16384];
     public List<WorldMap.WorldMapHumanTracker> i = Lists.newArrayList();
-    private final Map<EntityHuman, WorldMap.WorldMapHumanTracker> k = Maps.newHashMap();
+    public final Map<EntityHuman, WorldMap.WorldMapHumanTracker> k = Maps.newHashMap(); // Spigot private -> public
     public Map<String, MapIcon> decorations = Maps.newLinkedHashMap();
 
     // CraftBukkit start
