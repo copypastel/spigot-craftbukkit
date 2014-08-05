@@ -583,6 +583,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
             this.a(crashreport);
         } finally {
             try {
+                org.spigotmc.WatchdogThread.doStop();
                 this.isStopped = true;
                 this.stop();
             } catch (Throwable throwable1) {
@@ -687,6 +688,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
         this.methodProfiler.b();
         this.methodProfiler.b();
+        org.spigotmc.WatchdogThread.tick(); // Spigot
         SpigotTimings.serverTickTimer.stopTiming(); // Spigot
         org.spigotmc.CustomTimingsHandler.tick(); // Spigot
     }

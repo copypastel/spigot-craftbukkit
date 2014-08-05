@@ -279,7 +279,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
                 }
                 // CraftBukkit end
 
-                if (this.aQ() > 0L) {
+                if (false && this.aQ() > 0L) {  // Spigot - disable
                     Thread thread1 = new Thread(new ThreadWatchdog(this));
 
                     thread1.setName("Server Watchdog");
