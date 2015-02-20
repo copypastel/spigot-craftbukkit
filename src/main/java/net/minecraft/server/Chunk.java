@@ -32,7 +32,7 @@ public class Chunk {
     public final int locZ;
     private boolean m;
     public final Map<BlockPosition, TileEntity> tileEntities;
-    public final EntitySlice<Entity>[] entitySlices;
+    public final List<Entity>[] entitySlices; // Spigot
     private boolean done;
     private boolean lit;
     private boolean r;
@@ -83,14 +83,14 @@ public class Chunk {
         this.tileEntities = Maps.newHashMap();
         this.x = 4096;
         this.y = Queues.newConcurrentLinkedQueue();
-        this.entitySlices = (EntitySlice[]) (new EntitySlice[16]);
+        this.entitySlices = (List[]) (new List[16]); // Spigot
         this.world = world;
         this.locX = i;
         this.locZ = j;
         this.heightMap = new int[256];
 
         for (int k = 0; k < this.entitySlices.length; ++k) {
-            this.entitySlices[k] = new EntitySlice(Entity.class);
+            this.entitySlices[k] = new org.bukkit.craftbukkit.util.UnsafeList(); // Spigot
         }
 
         Arrays.fill(this.h, -999);
@@ -744,11 +744,11 @@ public class Chunk {
     public void addEntities() {
         this.j = true;
         this.world.b(this.tileEntities.values());
-        EntitySlice[] aentityslice = this.entitySlices;
+        List[] aentityslice = this.entitySlices; // Spigot
         int i = aentityslice.length;
 
         for (int j = 0; j < i; ++j) {
-            EntitySlice entityslice = aentityslice[j];
+            List entityslice = aentityslice[j]; // Spigot
 
             this.world.a((Collection) entityslice);
         }
@@ -777,7 +777,7 @@ public class Chunk {
             this.world.b(tileentity);
         }
 
-        EntitySlice[] aentityslice = this.entitySlices;
+        List[] aentityslice = this.entitySlices; // Spigot
         int i = aentityslice.length;
 
         for (int j = 0; j < i; ++j) {
@@ -864,12 +864,12 @@ public class Chunk {
         j = MathHelper.clamp(j, 0, this.entitySlices.length - 1);
 
         for (int k = i; k <= j; ++k) {
-            Iterator iterator = this.entitySlices[k].c(oclass).iterator();
+            Iterator iterator = this.entitySlices[k].iterator(); // Spigot
 
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                if (entity.getBoundingBox().c(axisalignedbb) && (predicate == null || predicate.apply((T) entity))) { // CraftBukkit - fix decompile error
+                if (oclass.isInstance(entity) && entity.getBoundingBox().c(axisalignedbb) && (predicate == null || predicate.apply((T) entity))) { // CraftBukkit - fix decompile error // Spigot - instance check
                     list.add((T) entity); // Fix decompile error
                 }
             }
@@ -1288,7 +1288,7 @@ public class Chunk {
         return this.tileEntities;
     }
 
-    public EntitySlice<Entity>[] getEntitySlices() {
+    public List<Entity>[] getEntitySlices() {
         return this.entitySlices;
     }
 
