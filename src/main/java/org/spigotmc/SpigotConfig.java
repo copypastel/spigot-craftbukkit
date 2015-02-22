@@ -388,4 +388,9 @@ public class SpigotConfig
             Bukkit.getLogger().info( "Debug logging is disabled" );
         }
     }
+
+    public static int itemDirtyTicks;
+    private static void itemDirtyTicks() {
+        itemDirtyTicks = getInt("settings.item-dirty-ticks", 20);
+    }
 }

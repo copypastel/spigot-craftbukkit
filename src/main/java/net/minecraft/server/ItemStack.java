@@ -469,6 +469,18 @@ public final class ItemStack {
         return itemstack.isEmpty() && itemstack1.isEmpty() ? true : (!itemstack.isEmpty() && !itemstack1.isEmpty() ? (itemstack.tag == null && itemstack1.tag != null ? false : itemstack.tag == null || itemstack.tag.equals(itemstack1.tag)) : false);
     }
 
+    // Spigot Start
+    public static boolean fastMatches(ItemStack itemstack, ItemStack itemstack1) {
+        if (itemstack.isEmpty() && itemstack1.isEmpty()) {
+            return true;
+        }
+        if (!itemstack.isEmpty() && !itemstack1.isEmpty()) {
+            return itemstack.count == itemstack1.count && itemstack.item == itemstack1.item && itemstack.damage == itemstack1.damage;
+        }
+        return false;
+    }
+    // Spigot End
+
     public static boolean matches(ItemStack itemstack, ItemStack itemstack1) {
         return itemstack.isEmpty() && itemstack1.isEmpty() ? true : (!itemstack.isEmpty() && !itemstack1.isEmpty() ? itemstack.d(itemstack1) : false);
     }
