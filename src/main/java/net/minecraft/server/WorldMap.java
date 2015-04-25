@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.util.Iterator;
@@ -26,7 +27,7 @@ public class WorldMap extends PersistentBase {
     public byte[] colors = new byte[16384];
     public List<WorldMap.WorldMapHumanTracker> i = Lists.newArrayList();
     public final Map<EntityHuman, WorldMap.WorldMapHumanTracker> k = Maps.newHashMap(); // Spigot private -> public
-    public Map<String, MapIcon> decorations = Maps.newLinkedHashMap();
+    public Map<UUID, MapIcon> decorations = Maps.newLinkedHashMap(); // Spigot
 
     // CraftBukkit start
     public final CraftMapView mapView;
@@ -157,7 +158,7 @@ public class WorldMap extends PersistentBase {
         }
 
         if (!entityhuman.inventory.f(itemstack)) {
-            this.decorations.remove(entityhuman.getName());
+            this.decorations.remove(entityhuman.getUniqueID()); // Spigot
         }
 
         for (int i = 0; i < this.i.size(); ++i) {
@@ -165,7 +166,7 @@ public class WorldMap extends PersistentBase {
 
             if (!worldmap_worldmaphumantracker1.trackee.dead && (worldmap_worldmaphumantracker1.trackee.inventory.f(itemstack) || itemstack.z())) {
                 if (!itemstack.z() && worldmap_worldmaphumantracker1.trackee.dimension == this.map && this.track) {
-                    this.a(MapIcon.Type.PLAYER, worldmap_worldmaphumantracker1.trackee.world, worldmap_worldmaphumantracker1.trackee.getName(), worldmap_worldmaphumantracker1.trackee.locX, worldmap_worldmaphumantracker1.trackee.locZ, (double) worldmap_worldmaphumantracker1.trackee.yaw);
+                    this.a(MapIcon.Type.PLAYER, worldmap_worldmaphumantracker1.trackee.world, worldmap_worldmaphumantracker1.trackee.getUniqueID(), worldmap_worldmaphumantracker1.trackee.locX, worldmap_worldmaphumantracker1.trackee.locZ, (double) worldmap_worldmaphumantracker1.trackee.yaw); // Spigot
                 }
             } else {
                 this.k.remove(worldmap_worldmaphumantracker1.trackee);
@@ -177,7 +178,7 @@ public class WorldMap extends PersistentBase {
             EntityItemFrame entityitemframe = itemstack.A();
             BlockPosition blockposition = entityitemframe.getBlockPosition();
 
-            this.a(MapIcon.Type.FRAME, entityhuman.world, "frame-" + entityitemframe.getId(), (double) blockposition.getX(), (double) blockposition.getZ(), (double) (entityitemframe.direction.get2DRotationValue() * 90));
+            this.a(MapIcon.Type.FRAME, entityhuman.world, UUID.nameUUIDFromBytes(("frame-" + entityitemframe.getId()).getBytes(Charsets.US_ASCII)), (double) blockposition.getX(), (double) blockposition.getZ(), (double) (entityitemframe.direction.get2DRotationValue() * 90)); // Spigot
         }
 
         if (itemstack.hasTag() && itemstack.getTag().hasKeyOfType("Decorations", 9)) {
@@ -186,8 +187,11 @@ public class WorldMap extends PersistentBase {
             for (int j = 0; j < nbttaglist.size(); ++j) {
                 NBTTagCompound nbttagcompound = nbttaglist.get(j);
 
-                if (!this.decorations.containsKey(nbttagcompound.getString("id"))) {
-                    this.a(MapIcon.Type.a(nbttagcompound.getByte("type")), entityhuman.world, nbttagcompound.getString("id"), nbttagcompound.getDouble("x"), nbttagcompound.getDouble("z"), nbttagcompound.getDouble("rot"));
+                // Spigot - start
+                UUID uuid = UUID.nameUUIDFromBytes(nbttagcompound.getString("id").getBytes(Charsets.US_ASCII));
+                if (!this.decorations.containsKey(uuid)) {
+                    this.a(MapIcon.Type.a(nbttagcompound.getByte("type")), entityhuman.world, uuid, nbttagcompound.getDouble("x"), nbttagcompound.getDouble("z"), nbttagcompound.getDouble("rot"));
+                    // Spigot - end
                 }
             }
         }
@@ -220,7 +224,7 @@ public class WorldMap extends PersistentBase {
 
     }
 
-    private void a(MapIcon.Type mapicon_type, World world, String s, double d0, double d1, double d2) {
+    private void a(MapIcon.Type mapicon_type, World world, UUID s, double d0, double d1, double d2) { // Spigot; string->uuid
         int i = 1 << this.scale;
         float f = (float) (d0 - (double) this.centerX) / (float) i;
         float f1 = (float) (d1 - (double) this.centerZ) / (float) i;

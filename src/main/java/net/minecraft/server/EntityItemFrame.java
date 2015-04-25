@@ -1,5 +1,9 @@
 package net.minecraft.server;
 
+// Spigot start
+import java.util.UUID;
+import org.apache.commons.codec.Charsets;
+// Spigot end
 import javax.annotation.Nullable;
 
 public class EntityItemFrame extends EntityHanging {
@@ -95,7 +99,7 @@ public class EntityItemFrame extends EntityHanging {
             if (itemstack.getItem() == Items.FILLED_MAP) {
                 WorldMap worldmap = ((ItemWorldMap) itemstack.getItem()).getSavedMap(itemstack, this.world);
 
-                worldmap.decorations.remove("frame-" + this.getId());
+                worldmap.decorations.remove(UUID.nameUUIDFromBytes(("frame-" + this.getId()).getBytes(Charsets.US_ASCII))); // Spigot
             }
 
             itemstack.a((EntityItemFrame) null);
