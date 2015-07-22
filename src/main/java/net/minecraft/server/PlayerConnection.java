@@ -1088,7 +1088,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         }
 
         // CraftBukkit start
-        if (packet == null) {
+        if (packet == null || this.processedDisconnect) { // Spigot
             return;
         } else if (packet instanceof PacketPlayOutSpawnPosition) {
             PacketPlayOutSpawnPosition packet6 = (PacketPlayOutSpawnPosition) packet;
