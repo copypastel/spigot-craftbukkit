@@ -1870,6 +1870,13 @@ public abstract class Entity implements ICommandListener {
                 }
             }
             // CraftBukkit end
+            // Spigot start
+            org.spigotmc.event.entity.EntityMountEvent event = new org.spigotmc.event.entity.EntityMountEvent(entity.getBukkitEntity(), this.getBukkitEntity());
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }
+            // Spigot end
             if (!this.world.isClientSide && entity instanceof EntityHuman && !(this.bw() instanceof EntityHuman)) {
                 this.passengers.add(0, entity);
             } else {
@@ -1899,6 +1906,7 @@ public abstract class Entity implements ICommandListener {
                 }
             }
             // CraftBukkit end
+            Bukkit.getPluginManager().callEvent( new org.spigotmc.event.entity.EntityDismountEvent(entity.getBukkitEntity(), this.getBukkitEntity())); // Spigot
             this.passengers.remove(entity);
             entity.j = 60;
         }
