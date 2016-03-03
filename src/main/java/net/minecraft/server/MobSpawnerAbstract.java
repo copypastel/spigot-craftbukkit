@@ -106,6 +106,9 @@ public abstract class MobSpawnerAbstract {
                 {
                     entity.fromMobSpawner = true;
                 }
+                        if (org.bukkit.craftbukkit.event.CraftEventFactory.callSpawnerSpawnEvent(entity, blockposition).isCancelled()) {
+                            continue;
+                        }
                 // Spigot End
                         ChunkRegionLoader.a(entity, world, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.SPAWNER); // CraftBukkit
                         world.triggerEffect(2004, blockposition, 0);
