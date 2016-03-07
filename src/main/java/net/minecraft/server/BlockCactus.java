@@ -31,7 +31,7 @@ public class BlockCactus extends Block {
             if (i < 3) {
                 int j = ((Integer) iblockdata.get(BlockCactus.AGE)).intValue();
 
-                if (j == 15) {
+                if (j >= (byte) range(3, ((100.0F / world.spigotConfig.cactusModifier) * 15) + 0.5F, 15)) { // Spigot
                     // world.setTypeUpdate(blockposition1, this.getBlockData()); // CraftBukkit
                     IBlockData iblockdata1 = iblockdata.set(BlockCactus.AGE, Integer.valueOf(0));
 

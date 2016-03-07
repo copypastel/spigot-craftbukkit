@@ -21,7 +21,7 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (!this.e(world, blockposition, iblockdata)) {
             this.f(world, blockposition, iblockdata);
-        } else if (world.random.nextInt(5) == 0) {
+        } else if (world.random.nextInt(Math.max(1, (int) (100.0F / world.spigotConfig.cocoaModifier) * 5)) == 0) { // Spigot
             int i = ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue();
 
             if (i < 2) {

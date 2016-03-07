@@ -54,7 +54,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
             if (i < this.g()) {
                 float f = a((Block) this, world, blockposition);
 
-                if (random.nextInt((int) (25.0F / f) + 1) == 0) {
+                if (random.nextInt((int) ((100.0F / world.spigotConfig.wheatModifier) * (25.0F / f)) + 1) == 0) { // Spigot
                     // CraftBukkit start
                     IBlockData data = this.setAge(i + 1);
                     CraftEventFactory.handleBlockGrowEvent(world, blockposition.getX(), blockposition.getY(), blockposition.getZ(), this, toLegacyData(data));
