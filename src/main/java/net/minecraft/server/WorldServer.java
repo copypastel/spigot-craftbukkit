@@ -423,6 +423,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                 chunk.n();
                 this.methodProfiler.c("tickChunk");
                 chunk.b(false);
+                if ( !chunk.areNeighborsLoaded( 1 ) ) continue; // Spigot
                 this.methodProfiler.c("thunder");
                 int l;
                 BlockPosition blockposition;
