@@ -48,6 +48,7 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.Main;
 // CraftBukkit end
 import org.bukkit.craftbukkit.SpigotTimings; // Spigot
+import org.spigotmc.SlackActivityAccountant; // Spigot
 
 public abstract class MinecraftServer implements Runnable, ICommandListener, IAsyncTaskHandler, IMojangStatistics {
 
@@ -122,6 +123,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     public static final int TICK_TIME = 1000000000 / TPS;
     private static final int SAMPLE_INTERVAL = 100;
     public final double[] recentTps = new double[ 3 ];
+    public final SlackActivityAccountant slackActivityAccountant = new SlackActivityAccountant();
     // Spigot end
 
     public MinecraftServer(OptionSet options, Proxy proxy, DataConverterManager dataconvertermanager, YggdrasilAuthenticationService yggdrasilauthenticationservice, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache) {
@@ -662,6 +664,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
     protected void C() throws ExceptionWorldConflict { // CraftBukkit - added throws
         SpigotTimings.serverTickTimer.startTiming(); // Spigot
+        this.slackActivityAccountant.tickStarted(); // Spigot
         long i = System.nanoTime();
 
         ++this.ticks;
@@ -707,7 +710,10 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         }
 
         this.methodProfiler.a("tallying");
-        this.h[this.ticks % 100] = System.nanoTime() - i;
+        // Spigot start
+        long tickNanos;
+        this.h[this.ticks % 100] = tickNanos = System.nanoTime() - i;
+        // Spigot end
         this.methodProfiler.b();
         this.methodProfiler.a("snooper");
         if (getSnooperEnabled() && !this.m.d() && this.ticks > 100) {  // Spigot
@@ -720,7 +726,9 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
         this.methodProfiler.b();
         this.methodProfiler.b();
+
         org.spigotmc.WatchdogThread.tick(); // Spigot
+        this.slackActivityAccountant.tickEnded(tickNanos); // Spigot
         SpigotTimings.serverTickTimer.stopTiming(); // Spigot
         org.spigotmc.CustomTimingsHandler.tick(); // Spigot
     }
