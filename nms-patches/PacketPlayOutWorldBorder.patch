@@ -13,3 +13,14 @@
          this.f = worldborder.getSize();
          this.e = worldborder.j();
          this.g = worldborder.i();
+@@ -110,10 +112,6 @@
+         packetlistenerplayout.a(this);
+     }
+ 
+-    public void a(PacketListener packetlistener) {
+-        this.a((PacketListenerPlayOut) packetlistener);
+-    }
+-
+     public static enum EnumWorldBorderAction {
+ 
+         SET_SIZE, LERP_SIZE, SET_CENTER, INITIALIZE, SET_WARNING_TIME, SET_WARNING_BLOCKS;
